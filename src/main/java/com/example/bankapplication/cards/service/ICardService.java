@@ -7,4 +7,8 @@ public interface ICardService {
     void createCard(String mobileNumber);
 
     CardDto fetchCardDetails(String mobileNumber);
+
+    void updateCardDetails(CardDto cardDto);
+
+    void deleteCardDetails(String mobiileNumber);
 }

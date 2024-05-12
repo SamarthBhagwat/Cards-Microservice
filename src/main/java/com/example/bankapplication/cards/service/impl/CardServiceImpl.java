@@ -2,6 +2,7 @@ package com.example.bankapplication.cards.service.impl;
 
 import com.example.bankapplication.cards.dto.CardDto;
 import com.example.bankapplication.cards.entity.Card;
+import com.example.bankapplication.cards.enums.CardType;
 import com.example.bankapplication.cards.exception.CardAlreadyExistsException;
 import com.example.bankapplication.cards.exception.ResourceNotFoundException;
 import com.example.bankapplication.cards.mapper.CardMapper;
@@ -40,12 +41,29 @@ public class CardServiceImpl implements ICardService {
         return cardMapper.mapCardToCardDto(card);
     }
 
+    @Override
+    public void updateCardDetails(CardDto cardDto) {
+        Card card = cardRepository.findByMobileNumber(cardDto.getMobileNumber()).orElseThrow(
+                () -> new ResourceNotFoundException("Card", "mobileNumber", cardDto.getMobileNumber())
+        );
+        card = cardMapper.mapCardDtoToCard(cardDto, card);
+        cardRepository.save(card);
+    }
+
+    @Override
+    public void deleteCardDetails(String mobileNumber) {
+        Card card = cardRepository.findByMobileNumber(mobileNumber).orElseThrow(
+                () -> new ResourceNotFoundException("Card", "mobileNumber", mobileNumber)
+        );
+        cardRepository.deleteById(card.getCardId());
+    }
+
     private static Card createDefaultCard(String mobileNumber){
         Card card = new Card();
         card.setMobileNumber(mobileNumber);
         String cardNumber = generateCardNumber();
         card.setCardNumber(cardNumber);
-        card.setCardType("CREDIT_CARD");
+        card.setCardType(CardType.CREDIT_CARD);
         card.setTotalLimit(1_00_000);
         card.setAmountUsed(0);
         card.setAvailableAmount(1_00_000);

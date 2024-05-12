@@ -1,9 +1,7 @@
 package com.example.bankapplication.cards.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.example.bankapplication.cards.enums.CardType;
+import jakarta.persistence.*;
 import lombok.*;
 
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor @ToString
@@ -14,8 +12,9 @@ public class Card extends BaseEntity{
     private int cardId;
 
     private String mobileNumber;
+    @Column(updatable = false)
     private String cardNumber;
-    private String cardType;
+    private CardType cardType;
     private int totalLimit;
     private int amountUsed;
     private int availableAmount;
