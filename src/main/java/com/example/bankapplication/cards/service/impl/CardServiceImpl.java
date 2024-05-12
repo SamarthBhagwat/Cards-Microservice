@@ -1,7 +1,10 @@
 package com.example.bankapplication.cards.service.impl;
 
+import com.example.bankapplication.cards.dto.CardDto;
 import com.example.bankapplication.cards.entity.Card;
 import com.example.bankapplication.cards.exception.CardAlreadyExistsException;
+import com.example.bankapplication.cards.exception.ResourceNotFoundException;
+import com.example.bankapplication.cards.mapper.CardMapper;
 import com.example.bankapplication.cards.repository.CardRepository;
 import com.example.bankapplication.cards.service.ICardService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +19,9 @@ public class CardServiceImpl implements ICardService {
     @Autowired
     CardRepository cardRepository;
 
+    @Autowired
+    CardMapper cardMapper;
+
     @Override
     public void createCard(String mobileNumber) {
         Optional<Card> card = cardRepository.findByMobileNumber(mobileNumber);
@@ -24,6 +30,14 @@ public class CardServiceImpl implements ICardService {
         }
         Card newCard = createDefaultCard(mobileNumber);
         cardRepository.save(newCard);
+    }
+
+    @Override
+    public CardDto fetchCardDetails(String mobileNumber) {
+        Card card = cardRepository.findByMobileNumber(mobileNumber).orElseThrow(
+                () -> new ResourceNotFoundException("Card", "mobileNumber", mobileNumber)
+        );
+        return cardMapper.mapCardToCardDto(card);
     }
 
     private static Card createDefaultCard(String mobileNumber){
