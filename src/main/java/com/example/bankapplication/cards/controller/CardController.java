@@ -26,7 +26,7 @@ public class CardController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<ResponseDto> createCard(@RequestParam @Valid
+    public ResponseEntity<ResponseDto> createCard(@RequestParam
                                @Pattern(regexp = "(^$|[0-9]{10})", message = "Mobile number must be 10 digit")
                                String mobileNumber){
         cardService.createCard(mobileNumber);
@@ -36,7 +36,7 @@ public class CardController {
     }
 
     @GetMapping("/fetch")
-    public ResponseEntity<CardDto> fetchCardDetails(@RequestParam @Valid
+    public ResponseEntity<CardDto> fetchCardDetails(@RequestParam
                                                         @Pattern(regexp = "(^$|[0-9]{10})", message = "Mobile number must be 10 digit")
                                                     String mobileNumber){
         CardDto cardDto = cardService.fetchCardDetails(mobileNumber);
@@ -44,14 +44,14 @@ public class CardController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<ResponseDto> updateCardDetails(@RequestBody CardDto cardDto){
+    public ResponseEntity<ResponseDto> updateCardDetails(@RequestBody @Valid CardDto cardDto){
         cardService.updateCardDetails(cardDto);
         ResponseDto successResponse = new ResponseDto(HttpStatus.OK.toString(), "Successfully updated card details");
         return new ResponseEntity<>(successResponse, HttpStatus.OK);
     }
 
     @DeleteMapping("/delete")
-    public ResponseEntity<ResponseDto> deleteCardDetails(@RequestParam @Valid @Pattern(regexp = "(^$|[0-9]{10})", message = "Mobile number must be 10 digit")
+    public ResponseEntity<ResponseDto> deleteCardDetails(@RequestParam @Pattern(regexp = "(^$|[0-9]{10})", message = "Mobile number must be 10 digit")
                                                          String mobileNumber){
         cardService.deleteCardDetails(mobileNumber);
         ResponseDto successResponse = new ResponseDto(HttpStatus.OK.toString(), "Successfully deleted card details");
